@@ -15,7 +15,7 @@ spec:
       serviceAccountName: cluster-deets-sa
       containers:
         - name: cluster-details
-          image: kafilorbitax/k8s-client-dotnet:1  # Replace with your actual Docker image
+          image: kafilorbitax/k8s-client-dotnet:4  # Replace with your actual Docker image
           env:
             - name: CLUSTER_DEETS_TOKEN
               valueFrom:
@@ -34,7 +34,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 8080
+      targetPort: 8080
   selector:
     app: cluster-details

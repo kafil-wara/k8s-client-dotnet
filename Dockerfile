@@ -2,7 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /app
 
-COPY *.csproj ./
+COPY ./Orbitax.K8sClient.Api/*.csproj ./
+RUN dotnet add package System.Security.Cryptography.X509Certificates
 RUN dotnet restore
 
 COPY . ./
@@ -14,4 +15,4 @@ WORKDIR /app
 
 COPY --from=build /app/out ./
 
-ENTRYPOINT ["dotnet", "K8sClient.dll"]
+ENTRYPOINT ["dotnet", "Orbitax.K8sClient.Api.dll"]
