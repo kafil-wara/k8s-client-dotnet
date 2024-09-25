@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-details-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cluster-details
+  template:
+    metadata:
+      labels:
+        app: cluster-details
+    spec:
+      serviceAccountName: cluster-deets-sa
+      containers:
+        - name: cluster-details
+          image: kafilorbitax/k8s-client-dotnet:1  # Replace with your actual Docker image
+          env:
+            - name: CLUSTER_DEETS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cluster-deets-token
+                  key: token
+            - name: K8S_API_SERVER_URL
+              value: "https://4AB34FA44AC19928C979A62F07A6F00C.gr7.ap-southeast-1.eks.amazonaws.com"  # Adjust as necessary
+          ports:
+            - containerPort: 80  # Assuming your .NET API listens on port 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-details-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: cluster-details
