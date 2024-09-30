@@ -15,7 +15,7 @@ spec:
       serviceAccountName: cluster-deets-sa
       containers:
         - name: cluster-details
-          image: kafilorbitax/k8s-client-dotnet:4  # Replace with your actual Docker image
+          image: kafilorbitax/k8s-client-dotnet:10  # Replace with your actual Docker image
           env:
             - name: CLUSTER_DEETS_TOKEN
               valueFrom:
