@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Orbitax.K8sClient.Api.Interfaces;
+using Orbitax.K8sClient.Api.Services;
 
 namespace Orbitax.K8sClient.Api
 {
@@ -24,5 +26,12 @@ namespace Orbitax.K8sClient.Api
 
             app.Run();
         }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddScoped<IKubernetesService, KubernetesService>();
+            services.AddControllers();
+        }
+
     }
 }
