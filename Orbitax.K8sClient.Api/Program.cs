@@ -29,7 +29,7 @@ namespace Orbitax.K8sClient.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IKubernetesService, KubernetesService>();
+            services.AddScoped<IK8sService, KubernetesService>();
             services.AddControllers();
         }
 

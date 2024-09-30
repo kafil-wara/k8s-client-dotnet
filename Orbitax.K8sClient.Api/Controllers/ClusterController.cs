@@ -12,10 +12,10 @@ namespace Orbitax.K8sClient.Api.Controllers
     [Route("api/[controller]")]
     public class ClusterController : ControllerBase
     {
-        private readonly IKubernetesService _kubernetesService;
+        private readonly IK8sService _kubernetesService;
         private readonly ILogger<ClusterController> _logger;
 
-        public ClusterController(IKubernetesService kubernetesService, ILogger<ClusterController> logger)
+        public ClusterController(IK8sService kubernetesService, ILogger<ClusterController> logger)
         {
             _kubernetesService = kubernetesService;
             _logger = logger;

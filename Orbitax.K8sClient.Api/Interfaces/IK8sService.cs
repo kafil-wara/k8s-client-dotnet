@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Orbitax.K8sClient.Api.Interfaces
 {
-    public interface IKubernetesService
+    public interface IK8sService
     {
         Task<List<string>> GetPodsAsync(string namespaceName);
         Task<List<string>> GetServicesAsync(string namespaceName);

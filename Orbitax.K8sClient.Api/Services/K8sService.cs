@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Orbitax.K8sClient.Api.Services
 {
-    public class KubernetesService : IKubernetesService
+    public class KubernetesService : IK8sService
     {
         private readonly IKubernetes _client;
         private readonly ILogger<KubernetesService> _logger;
