@@ -1,4 +1,3 @@
-// Services/KubernetesService.cs
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
@@ -13,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Orbitax.K8sClient.Api.Services
 {
-    public class KubernetesService : IK8sService
+    public class K8Service : IK8sService
     {
         private readonly IKubernetes _client;
-        private readonly ILogger<KubernetesService> _logger;
+        private readonly ILogger<K8Service> _logger;
 
-        public KubernetesService(ILogger<KubernetesService> logger)
+        public K8Service(ILogger<K8Service> logger)
         {
             var caCertPath = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt";
             var caCertPem = File.ReadAllText(caCertPath);
@@ -106,6 +105,47 @@ namespace Orbitax.K8sClient.Api.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating CronJob");
+                throw;
+            }
+        }
+
+        public async Task<V1Job> CreateJobAsync(string name, string namespaceName, string containerName, string image, string args = null)
+        {
+            var job = new V1Job
+            {
+                Metadata = new V1ObjectMeta
+                {
+                    Name = name
+                },
+                Spec = new V1JobSpec
+                {
+                    Template = new V1PodTemplateSpec
+                    {
+                        Spec = new V1PodSpec
+                        {
+                            Containers = new List<V1Container>
+                            {
+                                new V1Container
+                                {
+                                    Name = containerName,
+                                    Image = image,
+                                    Args = !string.IsNullOrEmpty(args) ? args.Split(',') : null
+                                }
+                            },
+                            RestartPolicy = "OnFailure"
+                        }
+                    }
+                }
+            };
+
+            try
+            {
+                var createdJob = await _client.BatchV1.CreateNamespacedJobAsync(job, namespaceName);
+                return createdJob;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating Job");
                 throw;
             }
         }

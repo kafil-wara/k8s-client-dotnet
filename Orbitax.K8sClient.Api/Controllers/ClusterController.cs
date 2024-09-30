@@ -1,4 +1,3 @@
-// Controllers/ClusterController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Orbitax.K8sClient.Api.Interfaces;
@@ -47,6 +46,26 @@ namespace Orbitax.K8sClient.Api.Controllers
         {
             var jobNames = await _kubernetesService.GetJobsAsync(namespaceName);
             return Ok(jobNames);
+        }
+
+        [HttpPost("CreateJob")]
+        public async Task<IActionResult> CreateJob(
+            [FromQuery] string name,
+            [FromQuery] string namespaceName,
+            [FromQuery] string containerName,
+            [FromQuery] string image,
+            [FromQuery] string args = null)
+        {
+            try
+            {
+                var job = await _kubernetesService.CreateJobAsync(name, namespaceName, containerName, image, args);
+                return Ok(job);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating Job");
+                return StatusCode(500, "Error creating Job: " + ex.Message);
+            }
         }
 
         [HttpPost("CreateCronJob")]
